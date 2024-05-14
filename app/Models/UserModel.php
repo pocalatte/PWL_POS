@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Authenticatable as AuthenticableTrait;
@@ -25,10 +26,17 @@ class UserModel extends Authenticatable implements JWTSubject
 
     protected $table = 'm_user';
     protected $primaryKey = 'user_id';
-    protected $fillable = ['level_Id', 'username', 'nama', 'password'];
+    protected $fillable = ['level_Id', 'username', 'nama', 'password', 'image'];
 
     public function level()
     {
         return $this->belongsTo(LevelModel::class, 'level_Id', 'level_id');
+    }
+
+    protected function image(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($image) => url('/storage/posts/' . $image),
+        );
     }
 }
